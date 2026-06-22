@@ -1,0 +1,18 @@
+{
+  "name": "teamplay-balancer",
+  "version": "1.0.0",
+  "description": "Daejin University Teamplay Balancer Web App",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "test-match": "node server/test-matching.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "author": "Antigravity",
+  "license": "ISC"
+}

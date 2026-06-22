@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>대진대학교 팀플 밸런서 (Teamplay Balancer)</title>
+  
+  <!-- SEO & Social Meta -->
+  <meta name="description" content="대진대 학생들을 위한 데이터 기반 공정한 조별과제 역할 분배 및 이력 관리 서비스">
+  <meta property="og:title" content="대진대학교 팀플 밸런서">
+  <meta property="og:description" content="데이터를 바탕으로 공평한 역할 분담을 완료해 보세요!">
+  
+  <!-- PWA Support -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#005AAB">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  
+  <!-- Typography & Icons -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Style Sheet -->
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Global Header -->
+    <header class="app-header">
+      <div class="header-container">
+        <h1 class="logo" id="header-logo"><i class="fa-solid fa-scale-balanced logo-icon"></i> 팀플 밸런서</h1>
+        <button id="logout-btn" class="icon-btn hide"><i class="fa-solid fa-right-from-bracket"></i></button>
+      </div>
+    </header>
+
+    <main class="app-content">
+      
+      <!-- Screen 1: Landing -->
+      <section id="landing-screen" class="screen active">
+        <div class="landing-content">
+          <div class="hero-image-wrapper">
+            <i class="fa-solid fa-people-group hero-icon animate-float"></i>
+          </div>
+          <h2 class="hero-title">대진대학교<br>팀플 밸런서</h2>
+          <p class="hero-subtitle">불공평한 조별과제 역할 분담을 데이터 기반으로 해결하고, 내 팀플 이력까지 안전하게 관리하세요.</p>
+          
+          <div class="hero-features">
+            <div class="feature-item">
+              <i class="fa-solid fa-circle-check feature-icon"></i>
+              <div>
+                <h3>데이터 기반의 공정성</h3>
+                <p>학과 특성과 가동 시간을 활용한 최적의 밸런스</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <i class="fa-solid fa-shield-halved feature-icon"></i>
+              <div>
+                <h3>이력 및 평판 관리</h3>
+                <p>내가 거쳐 간 과거의 팀플 기여도 기록</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bottom-sticky-area">
+            <button id="start-btn" class="btn btn-primary btn-lg btn-block">시작하기</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Screen 2: Login -->
+      <section id="login-screen" class="screen">
+        <div class="screen-container">
+          <h2 class="screen-title">로그인</h2>
+          <p class="screen-subtitle">팀플 밸런서 서비스 이용을 위해 계정을 입력해 주세요.</p>
+          
+          <form id="login-form" class="form-group">
+            <div class="input-container">
+              <input type="email" id="login-email" class="input-field" placeholder=" " required autocomplete="email">
+              <label for="login-email">이메일 주소</label>
+            </div>
+            <div class="input-container">
+              <input type="password" id="login-password" class="input-field" placeholder=" " required autocomplete="current-password">
+              <label for="login-password">비밀번호</label>
+            </div>
+            
+            <div id="login-error" class="error-msg hide"></div>
+            
+            <div class="bottom-sticky-area">
+              <button type="submit" id="login-submit-btn" class="btn btn-disabled btn-lg btn-block" disabled>로그인</button>
+              <div class="auth-helper">
+                <span>아직 회원이 아니신가요?</span>
+                <button type="button" id="go-to-signup" class="link-btn">회원가입</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Screen 3: Signup -->
+      <section id="register-screen" class="screen">
+        <div class="screen-container">
+          <h2 class="screen-title">회원가입</h2>
+          <p class="screen-subtitle">기여도 기록 관리를 위해 계정을 생성합니다.</p>
+          
+          <form id="signup-form" class="form-group">
+            <div class="input-container">
+              <input type="text" id="signup-nickname" class="input-field" placeholder=" " required autocomplete="username">
+              <label for="signup-nickname">닉네임</label>
+            </div>
+            <div class="input-container">
+              <input type="email" id="signup-email" class="input-field" placeholder=" " required autocomplete="email">
+              <label for="signup-email">이메일 주소</label>
+            </div>
+            <div class="input-container">
+              <input type="password" id="signup-password" class="input-field" placeholder=" " required autocomplete="new-password">
+              <label for="signup-password">비밀번호 (영문+숫자 8자 이상)</label>
+            </div>
+            
+            <div id="signup-error" class="error-msg hide"></div>
+            
+            <div class="bottom-sticky-area">
+              <button type="submit" id="signup-submit-btn" class="btn btn-disabled btn-lg btn-block" disabled>가입 완료</button>
+              <div class="auth-helper">
+                <span>이미 계정이 있으신가요?</span>
+                <button type="button" id="go-to-login" class="link-btn">로그인</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Screen 4: Dashboard -->
+      <section id="dashboard-screen" class="screen">
+        <div class="dashboard-container">
+          <div class="dashboard-welcome">
+            <div>
+              <span class="user-badge">대진대학교</span>
+              <h2 class="user-greeting"><span id="user-nickname-placeholder">조원</span>님</h2>
+              <p class="user-status-text">오늘도 스마트하게 팀플 역할을 나누어 보세요.</p>
+            </div>
+          </div>
+          
+          <button id="create-room-btn" class="card-action-btn animate-hover">
+            <div class="card-action-left">
+              <div class="action-icon-circle"><i class="fa-solid fa-plus"></i></div>
+              <div>
+                <h3>새로운 팀플 방 개설</h3>
+                <p>과목명과 인원을 설정해 방 만들기</p>
+              </div>
+            </div>
+            <i class="fa-solid fa-chevron-right action-arrow"></i>
+          </button>
+
+          <div class="dashboard-tabs">
+            <button class="tab-btn active" data-tab="created">내가 개설한 방</button>
+            <button class="tab-btn" data-tab="joined">참여한 방</button>
+          </div>
+
+          <div class="rooms-list-container">
+            <div id="created-rooms-area" class="rooms-tab-content active">
+              <div id="created-rooms-list" class="rooms-grid">
+                <!-- Dynamic cards -->
+              </div>
+            </div>
+            <div id="joined-rooms-area" class="rooms-tab-content">
+              <div id="joined-rooms-list" class="rooms-grid">
+                <!-- Dynamic cards -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Screen 5: Create Room -->
+      <section id="create-room-screen" class="screen">
+        <div class="screen-container">
+          <button id="back-to-dashboard-btn" class="back-btn"><i class="fa-solid fa-arrow-left"></i> 대시보드로 돌아가기</button>
+          <h2 class="screen-title">팀플 방 개설하기</h2>
+          <p class="screen-subtitle">개설하려는 조별과제의 기본 설정을 입력해 주세요.</p>
+          
+          <form id="create-room-form" class="form-group">
+            <div class="input-container">
+              <input type="text" id="room-subject" class="input-field" maxlength="20" placeholder=" " required>
+              <label for="room-subject">과목명 (최대 20자)</label>
+            </div>
+
+            <div class="form-label-group">
+              <label class="form-section-label">참여 총 인원수 (본인 포함)</label>
+              <div class="member-selector-grid">
+                <input type="radio" name="total_members" id="member-2" value="2" class="member-radio-input">
+                <label for="member-2" class="member-card">2명</label>
+                <input type="radio" name="total_members" id="member-3" value="3" class="member-radio-input">
+                <label for="member-3" class="member-card">3명</label>
+                <input type="radio" name="total_members" id="member-4" value="4" class="member-radio-input" checked>
+                <label for="member-4" class="member-card">4명</label>
+                <input type="radio" name="total_members" id="member-5" value="5" class="member-radio-input">
+                <label for="member-5" class="member-card">5명</label>
+                <input type="radio" name="total_members" id="member-6" value="6" class="member-radio-input">
+                <label for="member-6" class="member-card">6명</label>
+                <input type="radio" name="total_members" id="member-7" value="7" class="member-radio-input">
+                <label for="member-7" class="member-card">7명</label>
+                <input type="radio" name="total_members" id="member-8" value="8" class="member-radio-input">
+                <label for="member-8" class="member-card">8명</label>
+                <input type="radio" name="total_members" id="member-9" value="9" class="member-radio-input">
+                <label for="member-9" class="member-card">9명</label>
+                <input type="radio" name="total_members" id="member-10" value="10" class="member-radio-input">
+                <label for="member-10" class="member-card">10명</label>
+              </div>
+            </div>
+
+            <div id="create-room-error" class="error-msg hide"></div>
+            
+            <div class="bottom-sticky-area">
+              <button type="submit" id="create-room-submit-btn" class="btn btn-disabled btn-lg btn-block" disabled>방 개설 완료</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Screen 6: Waiting Room -->
+      <section id="waiting-screen" class="screen">
+        <div class="screen-container">
+          <button id="waiting-back-btn" class="back-btn"><i class="fa-solid fa-arrow-left"></i> 대시보드로 돌아가기</button>
+          
+          <div class="waiting-title-area">
+            <span class="status-badge pulse-badge" id="waiting-status-text">설문 모집 중</span>
+            <h2 id="waiting-subject-title" class="screen-title">대기실</h2>
+            <p class="screen-subtitle">팀원들이 초대 링크를 통해 들어와 설문을 진행해야 합니다.</p>
+          </div>
+
+          <!-- Progress Bar Card -->
+          <div class="toss-card progress-card">
+            <div class="progress-info">
+              <span class="progress-count"><strong id="submitted-count">0</strong> / <span id="total-target-count">4</span>명 완료</span>
+              <span class="progress-percent" id="progress-percentage">0%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" id="waiting-progress-fill" style="width: 0%;"></div>
+            </div>
+            <p class="progress-hint" id="progress-description-text">조원들을 기다리고 있어요.</p>
+          </div>
+
+          <!-- Invite Link Box -->
+          <div class="toss-card invite-link-card">
+            <h3>팀플 초대 링크</h3>
+            <p>팀원들에게 링크를 전달하여 설문을 요청하세요.</p>
+            <div class="link-copy-box">
+              <input type="text" id="invite-link-input" readonly value="">
+              <button id="copy-link-btn" class="btn btn-secondary">복사</button>
+            </div>
+          </div>
+
+          <!-- Members Joined List -->
+          <div class="members-status-section">
+            <h3>실시간 참여 현황</h3>
+            <ul id="waiting-members-list" class="members-status-list">
+              <!-- Dynamic members status -->
+            </ul>
+          </div>
+
+          <div class="bottom-sticky-area">
+            <button id="add-mock-members-btn" class="btn btn-secondary btn-lg btn-block hide mb-2"><i class="fa-solid fa-wand-magic-sparkles"></i> 가상 팀원 자동 채우기 (데모용)</button>
+            <button id="go-to-survey-btn" class="btn btn-primary btn-lg btn-block hide">내 설문 응답하기</button>
+            <button id="waiting-results-btn" class="btn btn-disabled btn-lg btn-block" disabled>매칭 결과 확인</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Screen 7: Toss-style Linear Survey Flow -->
+      <section id="survey-screen" class="screen">
+        <div class="survey-container">
+          <div class="survey-top-bar">
+            <button id="survey-back-btn" class="survey-back-icon"><i class="fa-solid fa-chevron-left"></i></button>
+            <div class="survey-progress-track">
+              <div class="survey-progress-fill" id="survey-progress-bar" style="width: 8.33%;"></div>
+            </div>
+            <span class="survey-step-indicator" id="survey-step-num">1/12</span>
+          </div>
+
+          <div class="survey-steps">
+            
+            <!-- Step 1: Department -->
+            <div class="survey-step active" data-step="1">
+              <h2 class="survey-question">소속 학과를 입력해 주세요.</h2>
+              <p class="survey-help-text">학과에 적합한 가중치를 계산하는 데 활용됩니다.</p>
+              <div class="input-container">
+                <input type="text" id="survey-dept" class="input-field" placeholder=" " required>
+                <label for="survey-dept">학과명 (예: 시각디자인학과)</label>
+              </div>
+            </div>
+
+            <!-- Step 2: Student ID Prefix -->
+            <div class="survey-step" data-step="2">
+              <h2 class="survey-question">본인의 학번을 알려주세요.</h2>
+              <p class="survey-help-text">고학번 조장의 밸런싱을 위해 활용됩니다.</p>
+              <div class="input-container">
+                <input type="text" id="survey-cohort" class="input-field" placeholder=" " required maxlength="4">
+                <label for="survey-cohort">학번 접두사 (예: 21)</label>
+              </div>
+            </div>
+
+            <!-- Step 3: Gender -->
+            <div class="survey-step" data-step="3">
+              <h2 class="survey-question">성별을 선택해 주세요.</h2>
+              <p class="survey-help-text">기본 프로필 셋팅 항목입니다.</p>
+              <div class="card-selection-grid">
+                <input type="radio" name="survey_gender" id="gender-m" value="M" class="card-radio-input">
+                <label for="gender-m" class="survey-selection-card">
+                  <div class="card-icon"><i class="fa-solid fa-mars"></i></div>
+                  <span class="card-label">남자</span>
+                </label>
+                <input type="radio" name="survey_gender" id="gender-f" value="W" class="card-radio-input">
+                <label for="gender-f" class="survey-selection-card">
+                  <div class="card-icon"><i class="fa-solid fa-venus"></i></div>
+                  <span class="card-label">여자</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Step 4: Preferred & Avoided Roles -->
+            <div class="survey-step" data-step="4">
+              <h2 class="survey-question">가장 선호하는 역할은 무엇인가요?</h2>
+              <p class="survey-help-text">매칭 시 1순위로 지향하는 최우선 역할입니다.</p>
+              <div class="card-selection-list">
+                <input type="radio" name="survey_pref" id="pref-leader" value="leader" class="card-radio-input">
+                <label for="pref-leader" class="survey-list-card">
+                  <h4>조장 (자료취합/PM)</h4>
+                  <p>일정 관리 및 최종 취합/검토 총괄</p>
+                </label>
+                
+                <input type="radio" name="survey_pref" id="pref-ppt" value="ppt" class="card-radio-input">
+                <label for="pref-ppt" class="survey-list-card">
+                  <h4>PPT 제작</h4>
+                  <p>스라이드 구성, 디자인 및 시각화 주도</p>
+                </label>
+                
+                <input type="radio" name="survey_pref" id="pref-presentation" value="presentation" class="card-radio-input">
+                <label for="pref-presentation" class="survey-list-card">
+                  <h4>발표 담당</h4>
+                  <p>발표 대본 작성, 스피치 및 질의응답 대응</p>
+                </label>
+                
+                <input type="radio" name="survey_pref" id="pref-research" value="research" class="card-radio-input">
+                <label for="pref-research" class="survey-list-card">
+                  <h4>자료조사</h4>
+                  <p>논문, 통계 등 핵심 정보 수집 및 요약 정리</p>
+                </label>
+              </div>
+
+              <h2 class="survey-question mt-4">가장 피하고 싶은 역할은 무엇인가요?</h2>
+              <p class="survey-help-text">가급적 매칭에서 제외될 수 있도록 참작하는 역할입니다.</p>
+              <div class="card-selection-list">
+                <input type="radio" name="survey_avoid" id="avoid-leader" value="leader" class="card-radio-input">
+                <label for="avoid-leader" class="survey-list-card card-avoid">
+                  <h4>조장 (자료취합/PM)</h4>
+                </label>
+                
+                <input type="radio" name="survey_avoid" id="avoid-ppt" value="ppt" class="card-radio-input">
+                <label for="avoid-ppt" class="survey-list-card card-avoid">
+                  <h4>PPT 제작</h4>
+                </label>
+                
+                <input type="radio" name="survey_avoid" id="avoid-presentation" value="presentation" class="card-radio-input">
+                <label for="avoid-presentation" class="survey-list-card card-avoid">
+                  <h4>발표 담당</h4>
+                </label>
+                
+                <input type="radio" name="survey_avoid" id="avoid-research" value="research" class="card-radio-input">
+                <label for="avoid-research" class="survey-list-card card-avoid">
+                  <h4>자료조사</h4>
+                </label>
+              </div>
+            </div>
+
+            <!-- Step 5: PPT Skill -->
+            <div class="survey-step" data-step="5">
+              <h2 class="survey-question">PPT 및 디자인 제작 숙련도는 어떤가요?</h2>
+              <p class="survey-help-text">발표 슬라이드 제작 퀄리티 향상을 위해 활용됩니다.</p>
+              <div class="card-selection-list">
+                <input type="radio" name="survey_ppt_skill" id="ppt-skill-high" value="3" class="card-radio-input">
+                <label for="ppt-skill-high" class="survey-list-card">
+                  <h4>상 (시각화 마스터)</h4>
+                  <p>카드뉴스 제작 가능, 피피티 템플릿 맞춤 디자인 가능</p>
+                </label>
+                
+                <input type="radio" name="survey_ppt_skill" id="ppt-skill-mid" value="2" class="card-radio-input" checked>
+                <label for="ppt-skill-mid" class="survey-list-card">
+                  <h4>중 (일반 수준)</h4>
+                  <p>기본 텍스트 배치 및 표/도형 서식 편집 가능</p>
+                </label>
+                
+                <input type="radio" name="survey_ppt_skill" id="ppt-skill-low" value="1" class="card-radio-input">
+                <label for="ppt-skill-low" class="survey-list-card">
+                  <h4>하 (단순 작업만)</h4>
+                  <p>타이핑 수정 및 기본 서식 복사 붙여넣기만 가능</p>
+                </label>
+              </div>
+            </div>
+
+            <!-- Step 6: Presentation Skill -->
+            <div class="survey-step" data-step="6">
+              <h2 class="survey-question">발표 경험 및 스피치에 자신 있으신가요?</h2>
+              <p class="survey-help-text">최종 발표자 선정 시 중요 가중치로 활용됩니다.</p>
+              <div class="card-selection-list">
+                <input type="radio" name="survey_pres_skill" id="pres-skill-high" value="3" class="card-radio-input">
+                <label for="pres-skill-high" class="survey-list-card">
+                  <h4>상 (발표 마스터)</h4>
+                  <p>사람들 앞에서 말하기를 좋아하고 질의응답 대응 가능</p>
+                </label>
+                
+                <input type="radio" name="survey_pres_skill" id="pres-skill-mid" value="2" class="card-radio-input" checked>
+                <label for="pres-skill-mid" class="survey-list-card">
+                  <h4>중 (일반 발표 가능)</h4>
+                  <p>발표 대본이나 슬라이드가 있다면 막힘없이 리딩 가능</p>
+                </label>
+                
+                <input type="radio" name="survey_pres_skill" id="pres-skill-low" value="1" class="card-radio-input">
+                <label for="pres-skill-low" class="survey-list-card card-avoid">
+                  <h4>하 (발표 기피)</h4>
+                  <p>무대공포증이 있거나 대중 앞에서의 발표를 크게 꺼림</p>
+                </label>
+              </div>
+            </div>
+
+            <!-- Step 7: Research Skill -->
+            <div class="survey-step" data-step="7">
+              <h2 class="survey-question">학술 자료조사 및 정보 요약 능력이 어떤가요?</h2>
+              <p class="survey-help-text">신뢰도 높은 핵심 데이터 수집 역량을 평가합니다.</p>
+              <div class="card-selection-list">
+                <input type="radio" name="survey_res_skill" id="res-skill-high" value="3" class="card-radio-input">
+                <label for="res-skill-high" class="survey-list-card">
+                  <h4>상 (전문 리서처)</h4>
+                  <p>학술 DB(RISS, KISS 등) 및 공공기관 통계 검색 및 보고서 인용 능숙</p>
+                </label>
+                
+                <input type="radio" name="survey_res_skill" id="res-skill-mid" value="2" class="card-radio-input" checked>
+                <label for="res-skill-mid" class="survey-list-card">
+                  <h4>중 (인터넷 구글링 가능)</h4>
+                  <p>포털/구글 뉴스 검색, 나무위키, 블로그 자료 기본 정리 가능</p>
+                </label>
+                
+                <input type="radio" name="survey_res_skill" id="res-skill-low" value="1" class="card-radio-input">
+                <label for="res-skill-low" class="survey-list-card">
+                  <h4>하 (요약 정리 서툼)</h4>
+                  <p>검색 및 원문 정보 분석, 핵심 요약 작성에 어려움을 느낌</p>
+                </label>
+              </div>
+            </div>
+
+            <!-- Step 8: Domain Relevance -->
+            <div class="survey-step" data-step="8">
+              <h2 class="survey-question">이번 조별과제 주제와의 전공 연관성은 어떤가요?</h2>
+              <p class="survey-help-text">도메인 전문성이 있는 경우 가중치가 부여됩니다.</p>
+              <div class="card-selection-list">
+                <input type="radio" name="survey_relevance" id="relevance-high" value="3" class="card-radio-input">
+                <label for="relevance-high" class="survey-list-card">
+                  <h4>상 (주 전공 / 관심 주제)</h4>
+                  <p>이미 핵심 지식을 잘 알고 있으며 자신 있는 과목임</p>
+                </label>
+                
+                <input type="radio" name="survey_relevance" id="relevance-mid" value="2" class="card-radio-input" checked>
+                <label for="relevance-mid" class="survey-list-card">
+                  <h4>중 (일반 이해 수준)</h4>
+                  <p>전공과 깊진 않으나 기초 지식은 알고 있는 교양 등</p>
+                </label>
+                
+                <input type="radio" name="survey_relevance" id="relevance-low" value="1" class="card-radio-input">
+                <label for="relevance-low" class="survey-list-card">
+                  <h4>하 (완전히 생소함)</h4>
+                  <p>전혀 연관 없는 분야이며 새로운 공부가 필요함</p>
+                </label>
+              </div>
+            </div>
+
+            <!-- Step 9: Document Writing Skill -->
+            <div class="survey-step" data-step="9">
+              <h2 class="survey-question">문서 작성 및 보고서 요약 숙련도는 어떤가요?</h2>
+              <p class="survey-help-text">가독성 높은 자료 정리와 최종 보고서 작성을 위해 활용됩니다.</p>
+              <div class="card-selection-list">
+                <input type="radio" name="survey_doc_skill" id="doc-skill-high" value="3" class="card-radio-input">
+                <label for="doc-skill-high" class="survey-list-card">
+                  <h4>상 (문서 구조화 마스터)</h4>
+                  <p>맞춤법과 문장 정리가 깔끔하고, 목차 및 요약 정리를 가독성 있게 작성 가능</p>
+                </label>
+                
+                <input type="radio" name="survey_doc_skill" id="doc-skill-mid" value="2" class="card-radio-input" checked>
+                <label for="doc-skill-mid" class="survey-list-card">
+                  <h4>중 (일반 문서 작성)</h4>
+                  <p>수집된 자료를 단락별로 나누고 핵심 내용을 무난하게 서술 가능</p>
+                </label>
+                
+                <input type="radio" name="survey_doc_skill" id="doc-skill-low" value="1" class="card-radio-input">
+                <label for="doc-skill-low" class="survey-list-card">
+                  <h4>하 (글쓰기가 낯선 편)</h4>
+                  <p>요약 글 작성이나 보고서 서식 맞추기에 조금 어려움을 느낌</p>
+                </label>
+              </div>
+            </div>
+
+            <!-- Step 10: Meeting Communication Style -->
+            <div class="survey-step" data-step="10">
+              <h2 class="survey-question">팀플 회의 진행 시 본인의 소통 스타일은 어떤가요?</h2>
+              <p class="survey-help-text">회의 성향을 바탕으로 최적의 협업 시너지를 계산합니다.</p>
+              <div class="card-selection-list">
+                <input type="radio" name="survey_comm_style" id="comm-active" value="1" class="card-radio-input">
+                <label for="comm-active" class="survey-list-card">
+                  <h4>주도적 의견 정리형</h4>
+                  <p>아이디어를 먼저 제시하고 회의 흐름을 주도하며 정리하는 것을 선호</p>
+                </label>
+                
+                <input type="radio" name="survey_comm_style" id="comm-moderate" value="2" class="card-radio-input" checked>
+                <label for="comm-moderate" class="survey-list-card">
+                  <h4>경청 및 조율 서포터형</h4>
+                  <p>다른 조원들의 제안을 잘 듣고 리액션하며 조율하는 역할을 선호</p>
+                </label>
+                
+                <input type="radio" name="survey_comm_style" id="comm-passive" value="3" class="card-radio-input">
+                <label for="comm-passive" class="survey-list-card">
+                  <h4>묵묵한 실무 집중형</h4>
+                  <p>회의 참여보다는 나에게 할당된 개별 결과물(PPT/자료) 제작에 더 집중하는 편</p>
+                </label>
+              </div>
+            </div>
+
+            <!-- Step 11: Conflict Resolution Style -->
+            <div class="survey-step" data-step="11">
+              <h2 class="survey-question">팀원 간 의견 대립이나 갈등 발생 시 본인의 태도는 어떤가요?</h2>
+              <p class="survey-help-text">팀의 분위기를 매끄럽게 조율하기 위한 위기 관리 지표입니다.</p>
+              <div class="card-selection-list">
+                <input type="radio" name="survey_conflict_style" id="conflict-mediator" value="1" class="card-radio-input">
+                <label for="conflict-mediator" class="survey-list-card">
+                  <h4>적극적 갈등 중재형</h4>
+                  <p>양측의 이야기를 충분히 듣고 절충안이나 타협점을 적극적으로 제시</p>
+                </label>
+                
+                <input type="radio" name="survey_conflict_style" id="conflict-logical" value="2" class="card-radio-input" checked>
+                <label for="conflict-logical" class="survey-list-card">
+                  <h4>객관적 논리 팩트형</h4>
+                  <p>감정을 배제하고 조별과제 평가 기준이나 팩트 데이터에 근거하여 판단</p>
+                </label>
+                
+                <input type="radio" name="survey_conflict_style" id="conflict-accommodating" value="3" class="card-radio-input">
+                <label for="conflict-accommodating" class="survey-list-card">
+                  <h4>원만한 합의 수용형</h4>
+                  <p>다수의 의견이나 결정을 존중하고 팀 내 조화와 분위기를 위해 순응</p>
+                </label>
+              </div>
+            </div>
+
+            <!-- Step 12: Time Availability & Target Grade -->
+            <div class="survey-step" data-step="12">
+              <h2 class="survey-question">이번 학기 본인의 시간적 여유는 어떤가요?</h2>
+              <p class="survey-help-text">알바, 학원, 다른 과제 등에 따른 리스크 분배에 활용됩니다.</p>
+              <div class="card-selection-grid select-3cols">
+                <input type="radio" name="survey_time" id="time-busy" value="1" class="card-radio-input">
+                <label for="time-busy" class="survey-selection-card">
+                  <span class="card-label">바쁨 / 매우 바쁨</span>
+                </label>
+                
+                <input type="radio" name="survey_time" id="time-normal" value="2" class="card-radio-input" checked>
+                <label for="time-normal" class="survey-selection-card">
+                  <span class="card-label">보통</span>
+                </label>
+                
+                <input type="radio" name="survey_time" id="time-free" value="3" class="card-radio-input">
+                <label for="time-free" class="survey-selection-card">
+                  <span class="card-label">매우 여유</span>
+                </label>
+              </div>
+
+              <h2 class="survey-question mt-4">이번 과제에 목표로 하는 학점은 무엇인가요?</h2>
+              <p class="survey-help-text">팀원에 대한 책임감 및 기여 의지를 확인합니다.</p>
+              <div class="card-selection-grid">
+                <input type="radio" name="survey_grade" id="grade-a" value="A+" class="card-radio-input" checked>
+                <label for="grade-a" class="survey-selection-card">
+                  <div class="card-icon"><i class="fa-solid fa-fire text-primary"></i></div>
+                  <span class="card-label font-bold">A+ 멱살캐리형</span>
+                  <span class="card-desc">열심히 캐리할 의향 있음</span>
+                </label>
+                
+                <input type="radio" name="survey_grade" id="grade-pass" value="Pass" class="card-radio-input">
+                <label for="grade-pass" class="survey-selection-card">
+                  <div class="card-icon"><i class="fa-solid fa-leaf text-secondary"></i></div>
+                  <span class="card-label font-bold">Pass 만족형</span>
+                  <span class="card-desc">적당히 1인분 기여</span>
+                </label>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom navigation -->
+          <div class="bottom-sticky-area text-center">
+            <div class="survey-navigation">
+              <button id="survey-prev-btn" class="btn btn-secondary btn-half hide">이전</button>
+              <button id="survey-next-btn" class="btn btn-primary btn-lg btn-block">다음</button>
+              <button id="survey-submit-btn" class="btn btn-primary btn-lg btn-block hide">설문 완료 및 제출</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Screen: Individual Diagnosis & Role Confirmation -->
+      <section id="survey-report-screen" class="screen">
+        <div class="screen-container">
+          <div class="diagnosis-header text-center">
+            <div class="diagnosis-badge" id="diagnosis-tag">성향 분석 완료</div>
+            <h2 class="screen-title mt-2">나의 팀플 성향 리포트</h2>
+            <p class="screen-subtitle">입력하신 설문을 바탕으로 도출된 진단 결과입니다.</p>
+          </div>
+
+          <!-- Diagnostic Profile Card -->
+          <div class="toss-card diagnosis-card text-center">
+            <div class="diagnosis-avatar" id="diagnosis-avatar-box">
+              <i class="fa-solid fa-brain"></i>
+            </div>
+            <h3 class="diagnosis-title" id="diagnosis-title-text">성실한 올라운더</h3>
+            <p class="diagnosis-desc" id="diagnosis-desc-text">묵묵히 팀을 보조하고 필요한 업무를 깔끔하게 처리합니다.</p>
+          </div>
+
+          <!-- Analysis Details -->
+          <div class="toss-card analysis-details-card">
+            <h3 class="form-section-label">상황 분석 결과</h3>
+            <ul class="analysis-traits-list">
+              <li>
+                <span class="trait-label">학업 몰입도</span>
+                <span class="trait-value" id="trait-commitment">A+ 목표</span>
+              </li>
+              <li>
+                <span class="trait-label">시간적 가용성</span>
+                <span class="trait-value" id="trait-time">여유로움</span>
+              </li>
+              <li>
+                <span class="trait-label">디자인 전문성</span>
+                <span class="trait-value" id="trait-design">보통</span>
+              </li>
+              <li>
+                <span class="trait-label">소통 스타일</span>
+                <span class="trait-value" id="trait-comm">경청 및 조율</span>
+              </li>
+              <li>
+                <span class="trait-label">문서 작성력</span>
+                <span class="trait-value" id="trait-doc">보통</span>
+              </li>
+              <li>
+                <span class="trait-label">갈등 조율 성향</span>
+                <span class="trait-value" id="trait-conflict">논리 팩트</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Manual Role Specification -->
+          <div class="toss-card role-selection-card">
+            <h3 class="form-section-label">성향 맞춤 역할 확정</h3>
+            <p class="role-selection-hint">원하는 역할을 지정하여 매칭 시스템에 우선 반영할 수 있습니다.</p>
+            <div class="form-label-group mt-2">
+              <div class="role-selector-vertical">
+                <input type="radio" name="confirmed_role" id="conf-leader" value="leader" class="card-radio-input">
+                <label for="conf-leader" class="survey-list-card">
+                  <h4>조장 (자료취합/PM)</h4>
+                  <p>일정 관리 및 최종 취합/PM 총괄</p>
+                </label>
+                
+                <input type="radio" name="confirmed_role" id="conf-ppt" value="ppt" class="card-radio-input">
+                <label for="conf-ppt" class="survey-list-card">
+                  <h4>PPT 제작</h4>
+                  <p>슬라이드 디자인 및 시각화 주도</p>
+                </label>
+                
+                <input type="radio" name="confirmed_role" id="conf-presentation" value="presentation" class="card-radio-input">
+                <label for="conf-presentation" class="survey-list-card">
+                  <h4>발표 담당</h4>
+                  <p>발표 대본 작성 및 스피치 대응</p>
+                </label>
+                
+                <input type="radio" name="confirmed_role" id="conf-research" value="research" class="card-radio-input">
+                <label for="conf-research" class="survey-list-card">
+                  <h4>자료조사</h4>
+                  <p>핵심 정보 수집 및 요약 정리</p>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="bottom-sticky-area">
+            <button id="confirm-diagnosis-btn" class="btn btn-primary btn-lg btn-block"><i class="fa-solid fa-circle-check"></i> 역할 지정 및 대기실로 이동</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Screen 8: Results Dashboard -->
+      <section id="result-screen" class="screen">
+        <div class="screen-container">
+          <div class="result-celebration">
+            <div class="celebration-circle animate-scale"><i class="fa-solid fa-award"></i></div>
+            <h2 class="screen-title mt-3">역할 매칭 완료!</h2>
+            <p class="screen-subtitle"><span id="result-subject-name">과목명</span> 팀플의 가중치 최적화 매칭 결과입니다.</p>
+          </div>
+
+          <!-- Intervened Banner -->
+          <div id="result-intervened-alert" class="alert-banner alert-warning hide">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <div>
+              <strong>모두의 기피 항목 조율을 위해 시스템 밸런서가 개입했습니다.</strong>
+              <p>기피하는 역할을 일부 수행하게 될 수 있습니다. 조원들의 깊은 양해 부탁드립니다.</p>
+            </div>
+          </div>
+
+          <!-- Results List Cards -->
+          <div class="results-list-section">
+            <h3>배정된 역할 카드</h3>
+            <div id="results-cards-container" class="results-cards-grid">
+              <!-- Dynamic result cards -->
+            </div>
+          </div>
+
+          <div class="bottom-sticky-area">
+            <button id="copy-result-text-btn" class="btn btn-primary btn-lg btn-block mb-2"><i class="fa-solid fa-copy"></i> 결과 텍스트 복사하기</button>
+            <button id="result-dashboard-btn" class="btn btn-secondary btn-lg btn-block">대시보드로 돌아가기</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
